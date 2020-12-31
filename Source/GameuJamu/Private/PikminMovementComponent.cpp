@@ -16,13 +16,10 @@ void UPikminMovementComponent::TickComponent(float DeltaTime, enum ELevelTick Ti
  
 
     // Get (and then clear) the movement vector that we set in ACollidingPawn::Tick
-    FVector DesiredMovementThisFrame = ConsumeInputVector().GetClampedToMaxSize(1.0f) * DeltaTime * 150.0f;
+    FVector DesiredMovementThisFrame = ConsumeInputVector().GetClampedToMaxSize(2.0f) * DeltaTime * 500.0f;
     if (!DesiredMovementThisFrame.IsNearlyZero())
     {
         FHitResult Hit;
-        if (GEngine) {
-            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Moving!"));
-        }
         
         SafeMoveUpdatedComponent(DesiredMovementThisFrame, UpdatedComponent->GetComponentRotation(), true, Hit);
 

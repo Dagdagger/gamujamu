@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PikminPawn.h"
+#include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerController.h"
 #include "GameuJamuPlayerController.generated.h"
 
@@ -40,6 +42,10 @@ protected:
 	void OnSetDestinationReleased();
 	void Shoot_XAxis();
 	void Shoot_YAxis();
+	int CurrentPikminIndex = 0;
+
+	TArray <AActor*> FoundPawns;
+	TArray <APikminPawn*> FoundPikmin;
 };
 
 

@@ -2,6 +2,8 @@
 
 #include "GameuJamuPlayerController.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "PikminPawn.h"
+#include "Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Classes/Components/DecalComponent.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "GameuJamuCharacter.h"
@@ -11,13 +13,28 @@ AGameuJamuPlayerController::AGameuJamuPlayerController()
 {
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Crosshairs;
+	
+	
+
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APikminPawn::StaticClass(), FoundPawns);
+
+
+	for (AActor* TActor: FoundPawns)
+	{
+		APikminPawn* PikminPawn = Cast<APikminPawn>(TActor);
+		FoundPikmin.Add(PikminPawn);
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Found Pawn!"));
+		}
+	}
+
 }
 
 void AGameuJamuPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 
-	// keep updating the destination every tick while desired
+	// keep updating the destination every tick while 
 	if (bMoveToMouseCursor)
 	{
 		MoveToMouseCursor();
@@ -49,10 +66,26 @@ void AGameuJamuPlayerController::OnResetVR()
 
 void AGameuJamuPlayerController::Shoot_XAxis() {
 
+	if (GEngine) {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Sent Command to shoot!"));
+	}
+	APikminPawn* PikminToShoot = FoundPikmin[CurrentPikminIndex];
+	PikminToShoot->Shoot_XAxis();
+	CurrentPikminIndex = CurrentPikminIndex + 1;
+	if (CurrentPikminIndex > FoundPikmin.Num()-1) {
+		CurrentPikminIndex = 0;
+	}
+	if (GEngine) {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Current Pikimin is " + CurrentPikminIndex));
+	}
 }
 
 void AGameuJamuPlayerController::Shoot_YAxis() {
-
+	if (GEngine) {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Sent Command to shoot!"));
+	}
+	APikminPawn* PikminToShoot = FoundPikmin[0];
+	PikminToShoot->Shoot_YAxis();
 }
 
 void AGameuJamuPlayerController::MoveToMouseCursor()

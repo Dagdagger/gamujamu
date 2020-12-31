@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DrawDebugHelpers.h"
 #include "GameFramework/Pawn.h"
+#include "../GameuJamuCharacter.h"
 #include "PikminMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "PikminPawn.generated.h"
@@ -14,21 +16,23 @@ class GAMEUJAMU_API APikminPawn : public APawn
 	GENERATED_BODY()
 
 		
-		
-		void Shoot_XAxis();
-		void Shoot_YAxis();
+
 		void StartGrowing();
 		void StopGrowing();
 
 		//Input Variables
 		FVector CurrentVelocity;
+		FVector AimedLocation;
+		FVector ShotVector;
 		bool bGrowing;
+		bool bShooting;
 	
 
 public:
 	// Sets default values for this pawn's properties
 	APikminPawn();
-
+	void Shoot_XAxis();
+	void Shoot_YAxis();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
