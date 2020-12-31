@@ -36,6 +36,9 @@ void AGameuJamuPlayerController::SetupInputComponent()
 	InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &AGameuJamuPlayerController::MoveToTouchLocation);
 	InputComponent->BindTouch(EInputEvent::IE_Repeat, this, &AGameuJamuPlayerController::MoveToTouchLocation);
 
+	InputComponent->BindAction("ShootX", IE_Pressed, this, &AGameuJamuPlayerController::Shoot_XAxis);
+	InputComponent->BindAction("ShootY", IE_Pressed, this, &AGameuJamuPlayerController::Shoot_YAxis);
+
 	InputComponent->BindAction("ResetVR", IE_Pressed, this, &AGameuJamuPlayerController::OnResetVR);
 }
 
