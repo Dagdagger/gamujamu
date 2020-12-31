@@ -25,8 +25,7 @@ APikminPawn::APikminPawn()
 	SetActorEnableCollision(true);
 	
 
-	InputComponent->BindAction("ShootX", IE_Pressed, this, &APikminPawn::Shoot_XAxis);
-	InputComponent->BindAction("ShootY", IE_Pressed, this, &APikminPawn::Shoot_YAxis);
+
 	// Create instance of 
 	OurMovementComponent = CreateDefaultSubobject<UPikminMovementComponent>(TEXT("CustomMovementComponent"));
 	OurMovementComponent->UpdatedComponent = RootComponent;

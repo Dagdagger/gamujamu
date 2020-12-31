@@ -38,6 +38,8 @@ protected:
 	/** Input handlers for SetDestination action. */
 	void OnSetDestinationPressed();
 	void OnSetDestinationReleased();
+	void Shoot_XAxis();
+	void Shoot_YAxis();
 };
 
 

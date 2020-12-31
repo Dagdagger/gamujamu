@@ -47,6 +47,14 @@ void AGameuJamuPlayerController::OnResetVR()
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
 }
 
+void AGameuJamuPlayerController::Shoot_XAxis() {
+
+}
+
+void AGameuJamuPlayerController::Shoot_YAxis() {
+
+}
+
 void AGameuJamuPlayerController::MoveToMouseCursor()
 {
 	if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled())
