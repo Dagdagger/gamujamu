@@ -6,6 +6,7 @@
 #include "DrawDebugHelpers.h"
 #include "GameFramework/Pawn.h"
 #include "../GameuJamuCharacter.h"
+#include "Components/BoxComponent.h"
 #include "PikminMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "PikminPawn.generated.h"
@@ -33,6 +34,7 @@ public:
 	APikminPawn();
 	void Shoot_XAxis();
 	void Shoot_YAxis();
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -49,6 +51,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class UPikminMovementComponent* OurMovementComponent;
+	
+
+	UBoxComponent* CollisionMesh = nullptr;
 
 	virtual UPawnMovementComponent* GetMovementComponent() const override;
 

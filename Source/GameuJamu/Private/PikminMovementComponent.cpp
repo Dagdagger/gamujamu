@@ -29,7 +29,7 @@ void UPikminMovementComponent::TickComponent(float DeltaTime, enum ELevelTick Ti
            if (GEngine) {
                GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Hit something!"));
            }
-            SlideAlongSurface(FVector::ZeroVector, 1.0f - Hit.Time, Hit.Normal, Hit);
+            SlideAlongSurface(DesiredMovementThisFrame, 1.0f - Hit.Time, Hit.Normal, Hit);
         }
     }
 };

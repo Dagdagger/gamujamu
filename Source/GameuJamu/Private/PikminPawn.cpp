@@ -8,6 +8,7 @@
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Engine/World.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/BoxComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
@@ -20,15 +21,22 @@ APikminPawn::APikminPawn()
 	bShooting = false;
 	// Create a dummy root component we can attach things to
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	
+	CollisionMesh = CreateDefaultSubobject<UBoxComponent>(FName("Collision Mesh"));
+	RootComponent = CollisionMesh;
+	CollisionMesh->SetBoxExtent(FVector(2.0f, 2.0f, 2.0f));
+	CollisionMesh->BodyInstance.SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics, true);
+	CollisionMesh->BodyInstance.SetResponseToAllChannels(ECR_Block);
+	CollisionMesh->bHiddenInGame = false;
 
 	// Create a Visible Component
 
 	OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PikminVisibleComponent"));
-
+	// CollisionMesh->SetupAttachment(RootComponent);
 	OurVisibleComponent->SetupAttachment(RootComponent);
 
-	SetActorEnableCollision(true);
 	
+
 
 
 	// Create instance of 
@@ -49,19 +57,21 @@ void APikminPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	FVector MainPlayerLocation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
-
-	if ((FVector::Dist(MainPlayerLocation, this->GetActorLocation()) > 300.f) && !bShooting) {
-		FVector MovementVector = MainPlayerLocation - this->GetActorLocation();
+	if (OurMovementComponent && (OurMovementComponent->UpdatedComponent == RootComponent))
+	{
+		if ((FVector::Dist(MainPlayerLocation, this->GetActorLocation()) > 300.f) && !bShooting) {
+			FVector MovementVector = MainPlayerLocation - this->GetActorLocation();
 			MovementVector.Normalize();
 			MovementVector = MovementVector * 200;
 
 			OurMovementComponent->AddInputVector(MovementVector);
-	}
-	else if (bShooting) {
+		}
+		else if (bShooting) {
 
-		OurMovementComponent->AddInputVector(ShotVector);
-		if (FVector::Dist(this->GetActorLocation(),AimedLocation)<100.f) {
-			bShooting = false;
+			OurMovementComponent->AddInputVector(ShotVector);
+			if (FVector::Dist(this->GetActorLocation(), AimedLocation) < 100.f) {
+				bShooting = false;
+			}
 		}
 	}
 }
@@ -84,6 +94,7 @@ void APikminPawn::Shoot_XAxis()
 	if (GEngine) {
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Shooting!"));
 	}
+
 
 	if (OurMovementComponent && (OurMovementComponent->UpdatedComponent == RootComponent))
 	{
