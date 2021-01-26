@@ -36,7 +36,9 @@ APikminPawn::APikminPawn()
 	OurVisibleComponent->SetupAttachment(RootComponent);
 
 	
-
+	PitchValue = 100.f;
+	YawValue = 0.f;
+	RollValue = 0.f;
 
 
 	// Create instance of 
@@ -56,6 +58,12 @@ void APikminPawn::BeginPlay()
 void APikminPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	// This is instantiated each frame, probably not good, need to create at the top then
+	// use the same FQuat when more "minions" are rendered
+	FRotator NewRotation = FRotator(PitchValue, YawValue, RollValue);
+	FQuat  QuatRotation = FQuat(NewRotation);
+
 	FVector MainPlayerLocation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
 	if (OurMovementComponent && (OurMovementComponent->UpdatedComponent == RootComponent))
 	{
@@ -68,7 +76,11 @@ void APikminPawn::Tick(float DeltaTime)
 		}
 		else if (bShooting) {
 
+			AddActorLocalRotation(QuatRotation, false, 0, ETeleportType::None);
 			OurMovementComponent->AddInputVector(ShotVector);
+			if (this->GetActorLocation().Z > 350.f) {
+				ShotVector.Z = -380.f;
+			}
 			if (FVector::Dist(this->GetActorLocation(), AimedLocation) < 100.f) {
 				bShooting = false;
 			}
@@ -111,10 +123,11 @@ void APikminPawn::Shoot_XAxis()
 
 				ShotVector = AimedLocation - this->GetActorLocation();
 				ShotVector.Normalize();
+				float CurrentGroundZValue = ShotVector.Z;
 				ShotVector = ShotVector * 500.f;
+				ShotVector.Z = 200.f;
 
 				OurMovementComponent->AddInputVector(ShotVector);
-	
 			}
 		}
 	}

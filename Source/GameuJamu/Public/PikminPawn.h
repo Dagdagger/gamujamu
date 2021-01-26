@@ -51,6 +51,14 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class UPikminMovementComponent* OurMovementComponent;
+
+	float PitchValue;
+
+	float YawValue;
+
+	float RollValue;
+
+
 	
 
 	UBoxComponent* CollisionMesh = nullptr;
